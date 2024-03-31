@@ -1,5 +1,6 @@
 package com.ruanzerah.skyio.entities;
 
+import com.ruanzerah.skyio.entities.dtos.UserDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,5 +22,10 @@ public class User {
     public User(String username, String password){
         this.username = username;
         this.password = password;
+    }
+
+    public User(UserDto userDto){
+        this.username = userDto.username();
+        this.password = userDto.password();
     }
 }
