@@ -1,10 +1,11 @@
 package com.ruanzerah.skyio.domain.user;
 
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,9 +17,10 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
         User user = userService.create(userDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(user);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").build(user.getId());
+        return ResponseEntity.created(uri).body(userDTO);
     }
 
     @GetMapping("/{id}")
