@@ -1,27 +1,26 @@
-package com.ruanzerah.skyio.entities;
+package com.ruanzerah.skyio.domain.user;
 
 import com.ruanzerah.skyio.entities.dtos.UserDto;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "user_tb")
+@NoArgsConstructor
 public class User {
-    @Column(name = "username")
-    private String username;
-    private String password;
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+    private String username;
+    private String password;
 
-    public User(String username, String password){
-        this.username = username;
-        this.password = password;
+    public User(UserDTO dto) {
+        this.username = dto.username();
+        this.password = dto.password();
     }
 
     public User(UserDto userDto){
