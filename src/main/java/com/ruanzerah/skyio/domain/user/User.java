@@ -15,12 +15,15 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    private String username;
+    private String name;
     private String password;
+    @Column(unique = true)
+    private String email;
 
     public User(UserDTO dto) {
-        this.username = dto.username();
+        this.name = dto.name();
         this.password = dto.password();
+        this.email = dto.email();
     }
 
     public User(UserDto userDto){
