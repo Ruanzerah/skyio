@@ -1,6 +1,8 @@
 package com.ruanzerah.skyio.domain.user;
 
+import com.ruanzerah.skyio.token.TokenService;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,11 +13,14 @@ import java.util.UUID;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final TokenService tokenService;
 
-    public User create(UserDTO dto) {
+    public UserResponseDTO create(UserDTO dto) {
         User user = new User(dto);
+        user.setPassword(passwordEncoder.encode(dto.password()));
         userRepository.save(user);
-        return user;
+        return new UserResponseDTO(user, tokenService.generate(user));
     }
 
     public User getByID(UUID id) {

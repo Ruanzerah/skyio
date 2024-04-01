@@ -1,3 +1,6 @@
 package com.ruanzerah.skyio.domain.user;
 
-public record UserDTO(String username, String password) {}
+import jakarta.validation.constraints.NotBlank;
+
+public record UserDTO(@NotBlank String name, @NotBlank String password, @NotBlank String email) {
+}

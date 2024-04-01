@@ -16,13 +16,6 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping
-    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
-        User user = userService.create(userDTO);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").build(user.getId());
-        return ResponseEntity.created(uri).body(userDTO);
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserByID(@PathVariable("id") UUID id) {
         return ResponseEntity.ok(userService.getByID(id));
