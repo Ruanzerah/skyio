@@ -15,18 +15,31 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import static com.ruanzerah.skyio.domain.user.UserRole.ADMIN;
+import static com.ruanzerah.skyio.domain.user.UserRole.FOUNDER;
+
 @Configuration
 @EnableWebSecurity
 @AllArgsConstructor
 public class SecurityConfiguration {
 
     private final SecurityFilter securityFilter;
-    private final CustomUserDetailsService customUserDetailsService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).headers(f -> f.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)).csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(a -> a.requestMatchers("/login").permitAll().requestMatchers("/register").permitAll().anyRequest().authenticated()).addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class).build();
+        return http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(req -> req.requestMatchers("/auth/login").permitAll()
+                        .requestMatchers("/auth/register").hasRole(ADMIN.toString())
+                        .requestMatchers("users/all").hasRole(ADMIN.toString())
+                        .requestMatchers("/*/**").hasRole(FOUNDER.toString())
+                        .anyRequest().authenticated()
+                )
+                .headers(f -> f.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
+                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
+                .build();
     }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
