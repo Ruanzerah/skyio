@@ -1,11 +1,12 @@
 package com.ruanzerah.skyio.domain.user;
 
-import com.ruanzerah.skyio.token.TokenService;
+import com.ruanzerah.skyio.domain.token.TokenService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -27,7 +28,7 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(RuntimeException::new);
     }
 
-    public List<User> getAll() {
-        return userRepository.findAll();
+    public Page<User> getAll(Pageable pageable) {
+        return userRepository.findAll(pageable);
     }
 }

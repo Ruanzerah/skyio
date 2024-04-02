@@ -1,11 +1,11 @@
 package com.ruanzerah.skyio.domain.user;
 
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,8 +21,9 @@ public class UserController {
         return ResponseEntity.ok(userService.getByID(id));
     }
 
-    @GetMapping("all")
-    public ResponseEntity<List<User>> getAll() {
-        return ResponseEntity.ok(userService.getAll());
+    @GetMapping(value = "all", params = {"page", "size"})
+    public List<User> findPaginate(@RequestParam("page") int page, @RequestParam("size") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return userService.getAll(pageable).getContent();
     }
 }
