@@ -1,6 +1,5 @@
 package com.ruanzerah.skyio.domain.user;
 
-import com.ruanzerah.skyio.entities.dtos.UserDto;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -68,10 +67,5 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
-    }
-
-    public User(UserDto userDto){
-        this.username = userDto.username();
-        this.password = userDto.password();
     }
 }
