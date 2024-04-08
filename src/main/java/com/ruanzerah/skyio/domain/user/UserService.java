@@ -24,9 +24,28 @@ public class UserService {
         return new UserResponseDTO(user, tokenService.generate(user));
     }
 
+    public void deleteAll() {
+        userRepository.deleteAll();
+    }
+
     public User getByID(UUID id) {
         return userRepository.findById(id).orElseThrow(RuntimeException::new);
     }
+
+    //assync
+//    public User getByID(UUID id) {
+//        return userRepository.findById(id).blockOptional().orElseThrow(RuntimeException::new);
+//    }
+
+//    private final R2dbcEntityTemplate template;
+
+
+//    public Page<User> getAll(Pageable pageable) {
+//        return userRepository.findAllBy(pageable).collectList().zipWith(userRepository.count()).map(p -> new PageImpl<>(p.getT1(), pageable, p.getT2())).block();
+//    }
+
+
+    //noaasssync
 
     public Page<User> getAll(Pageable pageable) {
         return userRepository.findAll(pageable);

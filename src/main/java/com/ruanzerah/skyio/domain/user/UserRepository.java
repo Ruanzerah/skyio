@@ -9,6 +9,7 @@ import java.util.UUID;
 @Repository
 public interface UserRepository extends JpaRepository<User, UUID> {
     Optional<User> findByEmail(String email);
+//    Flux<User> findAllBy(Pageable pageable);
 
     Optional<User> findByName(String name);
 }
