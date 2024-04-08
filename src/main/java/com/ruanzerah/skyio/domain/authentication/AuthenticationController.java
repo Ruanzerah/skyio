@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import reactor.core.publisher.Mono;
 
 import java.net.URI;
 
@@ -30,15 +31,17 @@ public class AuthenticationController {
 
 
     @PostMapping("/register")
-    public ResponseEntity<UserResponseDTO> register(@RequestBody @Valid UserDTO dto) {
-        UserResponseDTO userResponseDTO = userService.create(dto);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").build(userResponseDTO.user().getId());
-        return ResponseEntity.created(uri).body(userResponseDTO);
+    public Mono<ResponseEntity<UserResponseDTO>> register(@RequestBody @Valid UserDTO dto) {
+        return Mono.defer(() -> {
+            UserResponseDTO userResponseDTO = userService.create(dto);
+            URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").build(userResponseDTO.user().getId());
+            return Mono.just(ResponseEntity.created(uri).body(userResponseDTO));
+        });
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody @Valid UserDTO dto) {
-        Authentication authenticate = this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(dto.name(), dto.password()));
+    public ResponseEntity<String> login(@RequestBody @Valid AuthenticationDTO dto) {
+        Authentication authenticate = this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(dto.email(), dto.password()));
         return ResponseEntity.ok(tokenService.generate((User) authenticate.getPrincipal()));
     }
 }
