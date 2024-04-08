@@ -5,4 +5,4 @@ CREATE TABLE IF NOT EXISTS user_tb (
     EMAIL VARCHAR (255) NOT NULL,
     ROLE VARCHAR (255) NOT NULL
 );
-INSERT INTO user_tb (ID,name, password, email, role) VALUES (0x3f06af63a93c11e4979700505690773f,'GANGS', '$2a$10$Wfa1e5ytNViq7hEPi6UHSe51nbGekxIcbcVUU7dm42idLyjt1CIxG', 'teste@gmail.com', 'FOUNDER')
+INSERT IGNORE INTO user_tb (ID,name, password, email, role) VALUES (0x3f06af63a93c11e4979700505690773f,'GANGS', '$2a$10$Wfa1e5ytNViq7hEPi6UHSe51nbGekxIcbcVUU7dm42idLyjt1CIxG', 'teste@gmail.com', 'FOUNDER')
